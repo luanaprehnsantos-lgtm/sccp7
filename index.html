@@ -1,0 +1,84 @@
+!
+import pygame
+import random
+import sys
+
+# Inicializa o Pygame
+pygame.init()
+
+# Configurações da tela
+LARGURA = 800
+ALTURA = 600
+tela = pygame.display.set_mode((LARGURA, ALTURA))
+pygame.display.set_caption("Corinthians: Rumo às Taças!")
+
+# Cores (Padrão Alvinegro)
+BRANCO = (255, 255, 255)
+PRETO = (0, 0, 0)
+VERDE = (0, 128, 0)
+DOURADO = (212, 175, 55)
+VERMELHO = (200, 0, 0)
+
+# Configurações do Jogador (Corinthiano)
+jogador_tamanho = 50
+jogador_x = LARGURA // 2
+jogador_y = ALTURA - 70
+jogador_velocidade = 8
+
+# Configurações do Objetivo (Troféu)
+trofeu_tamanho = 30
+trofeu_x = random.randint(0, LARGURA - trofeu_tamanho)
+trofeu_y = -trofeu_tamanho
+trofeu_velocidade = 5
+
+# Configurações do Obstáculo (Rival)
+rival_tamanho = 40
+rival_x = random.randint(0, LARGURA - rival_tamanho)
+rival_y = -rival_tamanho
+rival_velocidade = 6
+
+# Pontuação e Fonte
+pontos = 0
+fonte = pygame.font.SysFont("Arial", 30)
+fonte_fim = pygame.font.SysFont("Arial", 50)
+
+# Clock para controlar o FPS
+clock = pygame.time.Clock()
+
+def desenhar_texto(texto, fonte, cor, x, y):
+    imagem = fonte.render(texto, True, cor)
+    tela.blit(imagem, (x, y))
+
+# Loop Principal do Jogo
+jogando = True
+game_over = False
+
+while jogando:
+    tela.fill(VERDE) # Campo de futebol de fundo
+
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            jogando = False
+            pygame.quit()
+            sys.exit()
+
+    if not game_over:
+        # Movimentação do Jogador
+        teclas = pygame.key.get_pressed()
+        if teclas[pygame.K_LEFT] and jogador_x > 0:
+            jogador_x -= jogador_velocidade
+        if teclas[pygame.K_RIGHT] and jogador_x < LARGURA - jogador_tamanho:
+            jogador_x += jogador_velocidade
+
+        # Movimentação do Troféu
+        trofeu_y += trofeu_velocidade
+        if trofeu_y > ALTURA:
+            trofeu_y = -trofeu_tamanho
+            trofeu_x = random.randint(0, LARGURA - trofeu_tamanho)
+
+        # Movimentação do Rival
+        rival_y += rival_velocidade
+        if rival_y > ALTURA:
+            rival_y = -rival_tamanho
+            rival_x = random.randint(0, LARGURA - rival_tamanho)
+            rival_velocidade += 0.2 #
